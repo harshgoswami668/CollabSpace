@@ -1,0 +1,24 @@
+{
+  "name": "collabspacebackend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "this is the backend file for a multi-tenant collaborative workspace backend with CRDT-based document synchronization, real-time editing, RBAC, asynchronous workers, Redis caching, and containerized infrastructure.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harshgoswami668/CollabSpace.git"
+  },
+  "author": "Harsh Goswami",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harshgoswami668/CollabSpace/issues"
+  },
+  "homepage": "https://github.com/harshgoswami668/CollabSpace#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
