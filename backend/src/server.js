@@ -21,7 +21,6 @@ app.get("/", (req, res) => {
 app.use('/emp', employeeRoutes);
 
 
-
 app.listen(port, () => {
     console.log(`CollabSpace is running on port ${port}`);
 

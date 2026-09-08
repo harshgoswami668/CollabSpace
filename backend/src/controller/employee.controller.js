@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken"
 import employeeModel from "../model/employee.js"
 
 
+
 export const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
@@ -58,6 +59,31 @@ export const createUser = async (req, res) => {
         
     } catch (error) {
         console.error("Failed to create user:", error.message);
+
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};
+
+
+
+
+export const getEmployeeProfile = async (req, res) => {
+    try {
+        const employee = await employeeModel.findById(req.user.userId);
+
+        if (!employee) {
+            return res.status(404).json({
+                message: "Employee not found"
+            });
+        }
+
+        res.status(200).json({
+            employee
+        });
+    } catch (error) {
+        console.error("Failed to fetch employee profile:", error.message);
 
         res.status(500).json({
             message: "Internal server error"
