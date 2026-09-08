@@ -1,9 +1,8 @@
-
-
 import express from "express"
 const router = express.Router()
 import 
-{ createOrganization, checkOrganizationService,  getOrganizationProfile} from "../controller/org.controller.js";
+{ createOrganization, checkOrganizationService, getOrganizationProfile } 
+from "../controller/org.controller.js";
 import authMiddleware from "../middleware/auth.js";
 
 router.get("/health", checkOrganizationService);

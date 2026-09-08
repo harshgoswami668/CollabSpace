@@ -1,6 +1,7 @@
 import organizationModel from "../model/organization.js";
 import empOrgModel from "../model/emporgrelation.js";
 
+
 export const checkOrganizationService = (req, res) => {
     res.status(200).json({
         message: "Organization service is running"

@@ -10,8 +10,8 @@ const emporgSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         role: {
             type: String,
-            enum: ["user", "admin"],
-            default: "user"
+            enum: ["member", "admin", "owner"],
+            default: "member"
         },
         ref: "Organization"
     }
