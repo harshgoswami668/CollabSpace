@@ -4,6 +4,7 @@ dotenv.config();
 import express from "express"
 import db from "./config/db.js"
 import employeeRoutes from "./route/employee.route.js"
+import orgRoutes from "./route/org.route.js"
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/emp', employeeRoutes);
+app.use('/org', orgRoutes);
 
 
 app.listen(port, () => {
