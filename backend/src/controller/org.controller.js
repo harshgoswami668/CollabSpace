@@ -1,5 +1,5 @@
 import organizationModel from "../model/organization.js";
-import empOrgModel from "../model/emporgrelation.js";
+import empOrgModel from "../model/empOrgRelation.js";
 
 
 export const checkOrganizationService = (req, res) => {

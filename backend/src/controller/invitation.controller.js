@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import organizationModel from "../model/organization.js";
 import invitationModel from "../model/invitation.js";
-import empOrgModel from "../model/emporgrelation.js";
+import empOrgModel from "../model/empOrgRelation.js";
 
 export const checkInvitationService = (req, res) => {
     res.status(200).json({
