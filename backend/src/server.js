@@ -8,7 +8,7 @@ import orgRoutes from "./route/org.route.js"
 import invitationRoutes from "./route/invitation.route.js"
 import workSpaceRoutes from "./route/workspace.route.js"
 import pageRoutes from "./route/page.routes.js"
-
+import blockRoutes from "./route/block.route.js"
 
 const app = express();
 const port = process.env.PORT;
@@ -27,6 +27,7 @@ app.use('/org', orgRoutes);
 app.use('/invite', invitationRoutes);
 app.use('/workspace', workSpaceRoutes);
 app.use('/page', pageRoutes);
+app.use('/block', blockRoutes);
 
 
 app.listen(port, () => {
