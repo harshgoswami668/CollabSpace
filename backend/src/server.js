@@ -7,6 +7,7 @@ import employeeRoutes from "./route/employee.route.js"
 import orgRoutes from "./route/org.route.js"
 import invitationRoutes from "./route/invitation.route.js"
 import workSpaceRoutes from "./route/workspace.route.js"
+import pageRoutes from "./route/page.routes.js"
 
 
 const app = express();
@@ -25,7 +26,7 @@ app.use('/emp', employeeRoutes);
 app.use('/org', orgRoutes);
 app.use('/invite', invitationRoutes);
 app.use('/workspace', workSpaceRoutes);
-
+app.use('/page', pageRoutes);
 
 
 app.listen(port, () => {
