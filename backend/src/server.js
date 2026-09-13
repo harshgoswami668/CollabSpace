@@ -9,6 +9,7 @@ import invitationRoutes from "./route/invitation.route.js"
 import workSpaceRoutes from "./route/workspace.route.js"
 import pageRoutes from "./route/page.routes.js"
 import blockRoutes from "./route/block.route.js"
+import hocuspocus from "./realtime/hocuspocus.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -34,3 +35,9 @@ app.listen(port, () => {
     console.log(`CollabSpace is running on port ${port}`);
 
 })
+
+hocuspocus.listen().then(() => {
+    console.log(
+        `Hocuspocus realtime server is running on port ${process.env.HOCUSPOCUS_PORT}`
+    );
+});
