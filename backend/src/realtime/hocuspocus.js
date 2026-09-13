@@ -17,6 +17,11 @@ const hocuspocus = new Server({
         registerDocument(documentName, document);
 
         console.log(`User ${context.user.userId} opened page ${documentName}`);
+    },
+
+
+    async onStoreDocument({ documentName, document }) {
+        await saveDocument(documentName, document);
     }
 });
 
