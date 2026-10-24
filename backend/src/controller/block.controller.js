@@ -1,8 +1,7 @@
 import blockModel from "../model/block.js";
 import pageModel from "../model/page.js";
-import 
-{ createYjsBlock, getYjsBlockContent, updateYjsBlockContent } 
-from "../realtime/documentManager.js";
+import { createYjsBlock, getYjsBlockContent, updateYjsBlockContent }
+    from "../realtime/documentManager.js";
 import commentModel from "../model/comment.js";
 
 export const checkBlockService = (req, res) => {
@@ -268,197 +267,302 @@ export const appendBlockContent = async (req, res) => {
 
 
 export const createComment = async (req, res) => {
-        try {
-            const { content } = req.body;
-            const { blockId } = req.params;
+    try {
+        const { content } = req.body;
+        const { blockId } = req.params;
 
-            if (
-                typeof content !== "string" ||
-                !content.trim()
-            ) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Comment content is required"
-                });
-            }
-
-            const block = await blockModel.findById(blockId);
-
-            if (!block) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Block not found"
-                });
-            }
-
-            const comment = await commentModel.create({
-                pageId: block.pageId,
-                blockId: block._id,
-                authorId: req.user.userId,
-                content: content.trim()
-            });
-
-            return res.status(201).json({
-                success: true,
-                comment
-            });
-
-        } catch (error) {
-            console.error("Failed to create comment:", error.message);
-
-            return res.status(500).json({
+        if (
+            typeof content !== "string" ||
+            !content.trim()
+        ) {
+            return res.status(400).json({
                 success: false,
-                message: "Internal server error"
+                message: "Comment content is required"
             });
         }
+
+        const block = await blockModel.findById(blockId);
+
+        if (!block) {
+            return res.status(404).json({
+                success: false,
+                message: "Block not found"
+            });
+        }
+
+        const comment = await commentModel.create({
+            pageId: block.pageId,
+            blockId: block._id,
+            authorId: req.user.userId,
+            content: content.trim()
+        });
+
+        return res.status(201).json({
+            success: true,
+            comment
+        });
+
+    } catch (error) {
+        console.error("Failed to create comment:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
+}
 
 
 
 export const getComments = async (req, res) => {
-        try {
-            const { blockId } = req.params;
+    try {
+        const { blockId } = req.params;
 
-            const block = await blockModel.findById(blockId);
+        const block = await blockModel.findById(blockId);
 
-            if (!block) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Block not found"
-                });
-            }
-
-            const comments = await commentModel
-                .find({
-                    blockId: block._id
-                })
-                .populate("authorId", "username")
-                .sort({
-                    createdAt: 1
-                });
-
-            return res.status(200).json({
-                success: true,
-                comments
-            });
-
-        } catch (error) {
-            console.error("Failed to fetch comments:", error.message);
-
-            return res.status(500).json({
+        if (!block) {
+            return res.status(404).json({
                 success: false,
-                message: "Internal server error"
+                message: "Block not found"
             });
         }
+
+        const comments = await commentModel
+            .find({
+                blockId: block._id
+            })
+            .populate("authorId", "username")
+            .sort({
+                createdAt: 1
+            });
+
+        return res.status(200).json({
+            success: true,
+            comments
+        });
+
+    } catch (error) {
+        console.error("Failed to fetch comments:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
+}
 
 
 export const deleteComment = async (req, res) => {
-        try {
-            const { commentId } = req.params;
+    try {
+        const { commentId } = req.params;
 
-            if (!mongoose.isValidObjectId(commentId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid comment ID"
-                });
-            }
-
-            const comment = await commentModel.findById(commentId);
-
-            if (!comment) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Comment not found"
-                });
-            }
-
-            if (
-                comment.authorId.toString() !==
-                req.user.userId.toString()
-            ) {
-                return res.status(403).json({
-                    success: false,
-                    message: "You cannot delete this comment"
-                });
-            }
-
-            await comment.deleteOne();
-
-            return res.status(200).json({
-                success: true,
-                message: "Comment deleted"
-            });
-
-        } catch (error) {
-            console.error("Failed to delete comment:", error.message);
-
-            return res.status(500).json({
+        if (!mongoose.isValidObjectId(commentId)) {
+            return res.status(400).json({
                 success: false,
-                message: "Internal server error"
+                message: "Invalid comment ID"
             });
         }
+
+        const comment = await commentModel.findById(commentId);
+
+        if (!comment) {
+            return res.status(404).json({
+                success: false,
+                message: "Comment not found"
+            });
+        }
+
+        if (
+            comment.authorId.toString() !==
+            req.user.userId.toString()
+        ) {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot delete this comment"
+            });
+        }
+
+        await comment.deleteOne();
+
+        return res.status(200).json({
+            success: true,
+            message: "Comment deleted"
+        });
+
+    } catch (error) {
+        console.error("Failed to delete comment:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
+}
 
 
 export const updateComment = async (req, res) => {
-        try {
-            const { commentId } = req.params;
-            const { content } = req.body;
+    try {
+        const { commentId } = req.params;
+        const { content } = req.body;
 
-            if (!mongoose.isValidObjectId(commentId)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid comment ID"
-                });
-            }
-
-            if (
-                typeof content !== "string" ||
-                !content.trim()
-            ) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Comment content is required"
-                });
-            }
-
-            const comment = await commentModel.findById(commentId);
-
-            if (!comment) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Comment not found"
-                });
-            }
-
-            if (
-                comment.authorId.toString() !==
-                req.user.userId.toString()
-            ) {
-                return res.status(403).json({
-                    success: false,
-                    message: "You cannot edit this comment"
-                });
-            }
-
-            comment.content = content.trim();
-
-            await comment.save();
-
-            return res.status(200).json({
-                success: true,
-                comment
-            });
-
-        } catch (error) {
-            console.error("Failed to update comment:", error.message);
-
-            return res.status(500).json({
+        if (!mongoose.isValidObjectId(commentId)) {
+            return res.status(400).json({
                 success: false,
-                message: "Internal server error"
+                message: "Invalid comment ID"
             });
         }
+
+        if (
+            typeof content !== "string" ||
+            !content.trim()
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Comment content is required"
+            });
+        }
+
+        const comment = await commentModel.findById(commentId);
+
+        if (!comment) {
+            return res.status(404).json({
+                success: false,
+                message: "Comment not found"
+            });
+        }
+
+        if (
+            comment.authorId.toString() !==
+            req.user.userId.toString()
+        ) {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot edit this comment"
+            });
+        }
+
+        comment.content = content.trim();
+
+        await comment.save();
+
+        return res.status(200).json({
+            success: true,
+            comment
+        });
+
+    } catch (error) {
+        console.error("Failed to update comment:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
+}
+
+
+
+
+export const mentionUser = async (req, res) => {
+    try {
+        const { blockId } = req.params;
+        const { mentionedUserId } = req.body;
+
+        if (!mongoose.isValidObjectId(blockId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid block ID"
+            });
+        }
+
+        if (
+            !mongoose.isValidObjectId(mentionedUserId)
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid mentioned user ID"
+            });
+        }
+
+        if (
+            mentionedUserId.toString() ===
+            req.user.userId.toString()
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "You cannot mention yourself"
+            });
+        }
+
+        const block = await blockModel.findById(blockId);
+
+        if (!block) {
+            return res.status(404).json({
+                success: false,
+                message: "Block not found"
+            });
+        }
+
+        const page = await pageModel.findById(
+            block.pageId
+        );
+
+        if (!page) {
+            return res.status(404).json({
+                success: false,
+                message: "Page not found"
+            });
+        }
+
+        // Verify the mentioned employee exists
+        const mentionedEmployee =
+            await employeeModel.findById(
+                mentionedUserId
+            );
+
+        if (!mentionedEmployee) {
+            return res.status(404).json({
+                success: false,
+                message: "Mentioned employee not found"
+            });
+        }
+
+        const mention = await mentionModel.create({
+            blockId: block._id,
+            pageId: page._id,
+            workspaceId: page.workspaceId,
+            mentionedUser: mentionedEmployee._id,
+            mentionedBy: req.user.userId
+        });
+
+        await createNotification({
+            employeeId: mentionedEmployee._id,
+            actorId: req.user.userId,
+            type: "mention",
+            title: `${req.user.username || "Someone"} mentioned you`,
+            entityType: "block",
+            entityId: block._id
+        });
+
+        return res.status(201).json({
+            success: true,
+            mention
+        });
+
+    } catch (error) {
+        console.error(
+            "Failed to create mention:",
+            error.message
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+}
+
+
+
 
 export default router;

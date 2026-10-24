@@ -3,7 +3,7 @@ import express from "express"
 const router = express.Router()
 
 
-import { getBlockContent, getPageBlocks, createBlock, updateBlock, deleteBlock, checkBlockService, appendBlockContent, deleteComment, createComment, getComments, updateComment }
+import { getBlockContent, getPageBlocks, createBlock, updateBlock, deleteBlock, checkBlockService, appendBlockContent, deleteComment, createComment, getComments, updateComment, mentionUser }
     from "../controller/block.controller.js"
 
 import authMiddleware from "../middleware/auth.js";
@@ -20,6 +20,7 @@ router.post("/blocks/:blockId/comments", authMiddleware, createComment);
 router.get("/blocks/:blockId/comments", authMiddleware, getComments);
 router.delete("/comments/:commentId", authMiddleware, deleteComment);
 router.patch("/comments/:commentId", authMiddleware, updateComment);
+router.post("/blocks/:blockId/mentions", authMiddleware, mentionUser);
 
 
 export default router
