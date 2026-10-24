@@ -18,7 +18,7 @@ export function getDocument(pageId) {
   );
 }
 
-export function createBlock(
+export function createYjsBlock(
   pageId,
   blockId
 ) {
@@ -26,7 +26,7 @@ export function createBlock(
     getDocument(pageId);
 
   if (!document) {
-    console.log("No such page exist");
+    console.log("No such document exist");
     return;
   }
 
@@ -46,7 +46,7 @@ export function createBlock(
 
 
 
-export function updateBlockContent(
+export function updateYjsBlockContent(
   pageId,
   blockId,
   content
@@ -141,7 +141,7 @@ export function deleteBlock(
 }
 
 
-export function getBlockContent(
+export function getYjsBlockContent(
   pageId,
   blockId
 ) {

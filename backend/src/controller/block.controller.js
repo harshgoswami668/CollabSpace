@@ -1,5 +1,8 @@
 import blockModel from "../model/block.js";
 import pageModel from "../model/page.js";
+import 
+{ createYjsBlock, getYjsBlockContent, updateYjsBlockContent } 
+from "../realtime/documentManager.js";
 
 export const checkBlockService = (req, res) => {
     res.status(200).json({
@@ -21,9 +24,21 @@ export const getBlockContent = async (req, res) => {
             });
         }
 
+        const content = getYjsBlockContent(
+            block.pageId,
+            block._id
+        );
+
+        if (content === null) {
+            return res.status(404).json({
+                success: false,
+                message: "Page is not currently active"
+            });
+        }
+
         return res.status(200).json({
             success: true,
-            content: block.content
+            content
         });
 
     } catch (error) {
@@ -40,21 +55,33 @@ export const getBlockContent = async (req, res) => {
 };
 
 
+
+
 export const getPageBlocks = async (req, res) => {
     try {
         const { pageId } = req.params;
 
         const blocks = await blockModel
             .find({
-                pageId
+                pageId,
+                isArchived: false
             })
             .sort({
                 order: 1
             });
 
+        const blocksWithContent = blocks.map(block => ({
+            ...block.toObject(),
+
+            content: getYjsBlockContent(
+                block.pageId,
+                block._id
+            )
+        }));
+
         return res.status(200).json({
             success: true,
-            blocks
+            blocks: blocksWithContent
         });
 
     } catch (error) {
@@ -69,7 +96,6 @@ export const getPageBlocks = async (req, res) => {
         });
     }
 };
-
 
 
 export const createBlock = async (req, res) => {
@@ -98,6 +124,11 @@ export const createBlock = async (req, res) => {
             createdBy: req.user.userId
         });
 
+        createYjsBlock(
+            pageId,
+            block._id
+        );
+
         return res.status(201).json({
             success: true,
             block
@@ -117,17 +148,16 @@ export const updateBlock = async (req, res) => {
     try {
         const updates = {};
 
-        if (req.body.content !== undefined) {
-            updates.content = req.body.content;
-        }
-
         if (req.body.type !== undefined) {
             updates.type = req.body.type;
         }
 
         const block = await blockModel.findByIdAndUpdate(
             req.params.blockId,
-            updates
+            updates,
+            {
+                new: true
+            }
         );
 
         if (!block) {
@@ -137,15 +167,28 @@ export const updateBlock = async (req, res) => {
             });
         }
 
+        if (req.body.content !== undefined) {
+            updateYjsBlockContent(
+                block.pageId,
+                block._id,
+                req.body.content
+            );
+        }
+
         return res.status(200).json({
             success: true,
             block
         });
 
     } catch (error) {
+        console.error(
+            "Failed to update block:",
+            error.message
+        );
+
         return res.status(500).json({
             success: false,
-            message: error.message
+            message: "Internal server error"
         });
     }
 };
