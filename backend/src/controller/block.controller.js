@@ -3,6 +3,7 @@ import pageModel from "../model/page.js";
 import { createYjsBlock, getYjsBlockContent, updateYjsBlockContent }
     from "../realtime/documentManager.js";
 import commentModel from "../model/comment.js";
+import { createNotification } from "../services/notificationService.js";
 
 export const checkBlockService = (req, res) => {
     res.status(200).json({
